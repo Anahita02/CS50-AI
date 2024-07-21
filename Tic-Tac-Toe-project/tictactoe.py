@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
 
 X = "X"
 O = "O"
@@ -54,7 +55,7 @@ def result(board, action):
     """
     player_move = player(board)
 
-    new_board = deepcopy(board)
+    new_board = copy.deepcopy(board)
     i, j = action
     if board[i][j] != None:
         return Exception
