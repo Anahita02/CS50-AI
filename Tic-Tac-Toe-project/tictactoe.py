@@ -52,8 +52,16 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    raise NotImplementedError
+    player_move = player(board)
 
+    new_board = deepcopy(board)
+    i, j = action
+    if board[i][j] != None:
+        return Exception
+    else:
+        new_board = board[i][j]
+        
+    return new_board
 
 def winner(board):
     """
