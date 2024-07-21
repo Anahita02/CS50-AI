@@ -60,14 +60,31 @@ def result(board, action):
         return Exception
     else:
         new_board = board[i][j]
-        
+
     return new_board
 
 def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
+    # horizontal
+    for i in range(3):
+        column = [board[x][i] for x in range(3)]
+        if column == [player] * 3:
+            return player
+    
+    #vertical
+    for row in board:
+        if row == [player] * 3:
+            return player
+        
+    #diagonal
+    #left
+    if board[0][0] == board[1][1] == board[2][2] !="_":
+        return player
+    #right
+    if board[0][2] == board[1][1] == board[2][0] !="_":
+        return player
 
 
 def terminal(board):
