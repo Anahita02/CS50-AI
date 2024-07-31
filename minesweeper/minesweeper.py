@@ -276,7 +276,7 @@ class MinesweeperAI():
                     mines = new_sentence.known_mines()
                     safes = new_sentence.known_safes()
                     if mines:
-                        for mines in mines:
+                        for mine in mines:
                             self.mark_mine(mine)
                     
                     if safes:
@@ -292,7 +292,10 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-        raise NotImplementedError
+        for i in self.safes - self.moves_made:
+            return i
+        
+        return None
 
     def make_random_move(self):
         """
@@ -301,4 +304,15 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        raise NotImplementedError
+        MaxMoves = self.width * self.height
+
+        while MaxMoves > 0:
+            MaxMoves -= 1
+
+            row = random.randrange(self.height)
+            column = random.randrange(self.width)
+
+            if (row, column) not in self.moves_made | self.mines:
+                return (row, column)
+            
+        return None
