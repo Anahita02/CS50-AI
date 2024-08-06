@@ -139,8 +139,42 @@ def joint_probability(people, one_gene, two_genes, have_trait):
         * everyone in set `have_trait` has the trait, and
         * everyone not in set` have_trait` does not have the trait.
     """
-    raise NotImplementedError
+    probability = 1
 
+    for person in people:
+        gene_number = 1 if person in one_gene else 2 if person in two_genes else 0
+        trait = True if person in have_trait else False
+
+        genne_num_prop = PROBS["gene"][gene_number]
+        trait_prop = PROBS["trait"][gene_number][trait]
+
+        if people[person]['mother'] is None:
+            #use the probability distribution cause the person has no parents
+            probability *= genne_num_prop * trait_prop
+        #has parents
+        else:
+            mother = people[person]['mother']
+            father = people[person]['father']
+            percentage = {}
+
+            for peoples in [mother, father]:
+                number_of_genes = 1 if peoples in one_gene else 2 if peoples in two_genes else 0
+                percen = 0 + PROBS["mutation"] if number_of_genes == 0 else 0.5 if number_of_genes == 1 else 1 - PROBS['mutation']
+                percentage[peoples] = percen
+
+            # 0, none of parents gave gene
+            if gene_number == 0:
+                probability *= (1 - percentage[mother]) * (1 - percentage[father])
+            #one of them
+            elif gene_number == 1:
+                probability *= (1 - percentage[mother]) * percentage[father] + (1 - percentage[father]) * percentage[mother]
+            # both of them
+            else:
+                probability *= percentage[mother] * percentage[father]
+
+            probability *= trait
+
+    return probability 
 
 def update(probabilities, one_gene, two_genes, have_trait, p):
     """
